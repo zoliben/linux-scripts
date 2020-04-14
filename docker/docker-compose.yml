@@ -1,0 +1,47 @@
+version: '2'
+services:
+    web:
+            image: nginx
+            restart: unless-stopped
+            container_name: nginx
+            ports:
+                    - "80:80"
+                    - "443:443"
+                    - "8080:8080"
+            volumes:
+                    - /root/nginx/conf.d/:/etc/nginx/conf.d/
+                    - /etc/letsencrypt/archive/website/:/etc/nginx/ssl/website
+                    - /var/www:/var/www
+            links:
+                    - db
+                    - php
+
+    php:
+            build:
+                    context: .
+            container_name: php
+            restart: unless-stopped
+            volumes:
+                    - /var/www:/var/www
+            links:
+                    - db 
+    db:
+            image: mariadb
+            restart: unless-stopped
+            container_name: mariadb
+            environment:
+                    - MYSQL_ROOT_PASSWORD=
+                    - MYSQL_DATABASE=radio
+            volumes:
+                    - /db/mysql:/var/lib/mysql
+
+    phpmyadmin:
+            image: phpmyadmin/phpmyadmin
+            container_name: phpmyadmin
+            restart: unless-stopped
+            ports:
+                    - 1337:80
+            volumes:
+                    - /sessions
+            links:
+                    - db
