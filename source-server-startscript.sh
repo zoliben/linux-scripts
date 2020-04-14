@@ -25,7 +25,7 @@ maxplayers="20"
 game="csgo"
 # set the starting map
 map="de_dust2"
-# steam token id for the server browser
+# steam token id for the server browser - you can get the token here: https://steamcommunity.com/dev/managegameservers
 steamtoken=""
 
 # set the steam port
